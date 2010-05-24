@@ -69,10 +69,15 @@ typedef long long int64_t;
 #    define BASEKIT_API
 #  endif
 */
+
 #if defined(WIN32) || defined(__WINS__) || defined(__MINGW32__) || defined(_MSC_VER)
 #define inline __inline
 #define snprintf _snprintf
-#define usleep(x) Sleep(((x)+999)/1000)
+
+/* MinGW already has a usleep.  This macro causes compile error in its declaration. */
+#ifndef __MINGW32__
+//#define usleep(x) Sleep(((x)+999)/1000)
+#endif
 
 #define HAS_FIBERS 1
 

@@ -91,7 +91,7 @@ IOINLINE void *List_rawAt_(List *self, size_t index)
 }
 
 
-IOINLINE void *List_at_(const List *self, ssize_t index)
+IOINLINE void *List_at_(const List *self, size_t index)
 {
 
     /* Negative indexing is also supported. */

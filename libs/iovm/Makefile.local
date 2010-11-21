@@ -6,7 +6,7 @@ endif
 iofiles=$(wildcard io/*.io)
 
 tools/io2c:
-	$(CC) tools/io2c.c $(CCLDOUTFLAG)tools/io2c
+	gcc tools/io2c.c $(CCLDOUTFLAG)tools/io2c
 
 all_begin: source/IoVMInit.c
 

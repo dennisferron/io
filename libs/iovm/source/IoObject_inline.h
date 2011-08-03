@@ -33,13 +33,13 @@ IOINLINE PHashRecord *PHash_record2_(PHash *self, void *k)
 IOINLINE void *PHash_at_(PHash *self, void *k)
 {
 	PHashRecord *r;
-	
+
 	r = PHash_record1_(self, k);
 	if(k == r->k) return r->v;
-	
-	r = PHash_record2_(self, k);	
+
+	r = PHash_record2_(self, k);
 	if(k == r->k) return r->v;
-	
+
 	return 0x0;
 }
 
@@ -56,9 +56,9 @@ IOINLINE int PHashKey_hasKey_(PHash *self, void *key)
 IOINLINE void PHash_at_put_(PHash *self, void *k, void *v)
 {
 	PHashRecord *r;
-	
+
 	r = PHash_record1_(self, k);
-	
+
 	if(!r->k)
 	{
 		r->k = k;
@@ -66,7 +66,7 @@ IOINLINE void PHash_at_put_(PHash *self, void *k, void *v)
 		self->keyCount ++;
 		return;
 	}
-	
+
 	if(r->k == k)
 	{
 		r->v = v;
@@ -82,13 +82,13 @@ IOINLINE void PHash_at_put_(PHash *self, void *k, void *v)
 		self->keyCount ++;
 		return;
 	}
-	
+
 	if(r->k == k)
 	{
 		r->v = v;
 		return;
 	}
-	
+
 	{
 	PHashRecord x;
 	x.k = k;
@@ -377,7 +377,7 @@ IOINLINE int IoObject_mark(IoObject *self)
 			{
 				//printf("s = %s\n", s);
 				//printf("vp = %p\n", (void *)v);
-				
+
 				if(ISSEQ((IoObject *)v))
 				{
 					printf("%s = '%s'\n", s, CSTRING((IoSeq *)v));
@@ -388,7 +388,7 @@ IOINLINE int IoObject_mark(IoObject *self)
 				}
 			}*/
 			IoObject_shouldMark((IoObject *)v);
-			//if(strcmp(s, "path") == 0) 
+			//if(strcmp(s, "path") == 0)
 			//printf("v.\n");
 		);
 	}
@@ -434,14 +434,15 @@ IOINLINE IO_METHOD(IoObject, forward)
 	IoObject *context;
 	IoObject *forwardSlot = IoObject_rawGetSlot_context_(self, state->forwardSymbol, &context);
 
-	/*
+
+    // DLF:  This was commented out; I wonder if it still works?
 	if (Coro_stackSpaceAlmostGone((Coro*)IoCoroutine_cid(state->currentCoroutine)))
 	{
 
 		IoState_error_(IOSTATE, m, "stack overflow in forward while sending '%s' message to a '%s' object",
 					CSTRING(IoMessage_name(m)), IoObject_name(self));
 	}
-	*/
+
 
 	if (forwardSlot)
 	{

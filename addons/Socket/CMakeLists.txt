@@ -38,13 +38,22 @@ if(EVENT_FOUND)
 		"${CMAKE_CURRENT_SOURCE_DIR}/source/IoIPAddress.c"
 		"${CMAKE_CURRENT_SOURCE_DIR}/source/IoSocket.c"
 		"${CMAKE_CURRENT_SOURCE_DIR}/source/IoSocketInit.c"
+		"${CMAKE_CURRENT_SOURCE_DIR}/source/Address.c"
+		"${CMAKE_CURRENT_SOURCE_DIR}/source/IoUnixPath.c"
 	)
+
+	IF(NOT MSVC AND NOT MINGW)
+		SET(SRCS ${SRCS}
+			"${CMAKE_CURRENT_SOURCE_DIR}/source/UnixPath.c"
+		)
+	ENDIF(NOT MSVC AND NOT MINGW)
 
 	set(LIBS "")
 	
 	if(MSVC)
 		set(LIBS "Ws2_32.lib Iphlpapi.lib")
 	elseif(MINGW)
+		add_definitions(-DIO_WINSOCK_COMPAT)
 		set(LIBS "-lws2_32 -liphlpapi")
 	endif()
 	
@@ -54,6 +63,6 @@ if(EVENT_FOUND)
 	target_link_libraries(IoSocket iovmall ${EVENT_LIBRARY} ${LIBS})
 
 	# Install the addon to our global addons hierarchy.
-	install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/io/addons)
-	install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_build DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/io/addons/Socket)
+	install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION lib/io/addons)
+	install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_build DESTINATION lib/io/addons/Socket)
 endif(EVENT_FOUND)

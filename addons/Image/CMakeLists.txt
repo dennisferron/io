@@ -19,6 +19,7 @@ if(PNG_FOUND AND TIFF_FOUND AND JPEG_FOUND)
 
 	# Add definitions
 	add_definitions(${PNG_DEFINITIONS})
+	add_definitions(-DBUILDING_IMAGE_ADDON)
 
 	# Additional include directories
 	include_directories(${PNG_INCLUDE_DIR} ${TIFF_INCLUDE_DIR} ${JPEG_INCLUDE_DIR})
@@ -44,6 +45,6 @@ if(PNG_FOUND AND TIFF_FOUND AND JPEG_FOUND)
 	target_link_libraries(IoImage iovmall ${PNG_LIBRARIES} ${TIFF_LIBRARIES} ${JPEG_LIBRARIES})
 
 	# Install the addon to our global addons hierarchy.
-	install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/io/addons)
-	install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_build DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/io/addons/Image)
+	install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION lib/io/addons)
+	install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_build DESTINATION lib/io/addons/Image)
 endif(PNG_FOUND AND TIFF_FOUND AND JPEG_FOUND)

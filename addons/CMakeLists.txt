@@ -17,6 +17,12 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -flat_namespace")
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
+# OpenBSD needs /usr/local/lib and /usr/lib searched
+if(${CMAKE_SYSTEM_NAME} MATCHES "OpenBSD")
+	set(CMAKE_SHARED_LINKER_FLAGS "-L/usr/local/lib -L/usr/lib ${CMAKE_SHARED_LINKER_FLAGS}")
+endif(${CMAKE_SYSTEM_NAME} MATCHES "OpenBSD")
+
+
 # Get the filename component, and generate the IoFooInit.c file.
 macro(generate_ioinit NAME)
 	# Ensure the source dir exists.
@@ -59,7 +65,7 @@ add_subdirectory(Facebook)
 add_subdirectory(Flux)
 add_subdirectory(Fnmatch)
 add_subdirectory(Font)
-#add_subdirectory(GLFW) # XXX: Can't meet dependencies
+add_subdirectory(GLFW) # XXX: Can't meet dependencies
 add_subdirectory(GoogleSearch)
 add_subdirectory(HttpClient)
 add_subdirectory(Image)
@@ -73,7 +79,7 @@ add_subdirectory(MD5)
 add_subdirectory(MySQL)
 #add_subdirectory(NetworkAdapter)
 add_subdirectory(NotificationCenter)
-add_subdirectory(Oauth) # OAuth should no longer break CMake configuration on Windows now.
+#add_subdirectory(Oauth) # OAuth should no longer break CMake configuration on Windows now.
 #add_subdirectory(ODE) # XXX: Can't meet dependencies
 #add_subdirectory(ObjcBridge) # XXX: Broken for me -- Objective-C 2.0 not supported
 add_subdirectory(Obsidian)
@@ -93,10 +99,12 @@ add_subdirectory(SGML)
 add_subdirectory(SHA1)
 #add_subdirectory(SQLite) # XXX: Want to delete in favour of SQLite3
 add_subdirectory(SQLite3)
-add_subdirectory(SampleRateConverter)
+#add_subdirectory(SampleRateConverter)
 add_subdirectory(SecureSocket)
 #add_subdirectory(SkipDB) # XXX: Disabled...why?
-add_subdirectory(Socket)
+if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "OpenBSD") # This should not be disabled for any platform. Upgrade Socket to support libevent2
+  add_subdirectory(Socket)
+endif(NOT ${CMAKE_SYSTEM_NAME} MATCHES "OpenBSD")
 #add_subdirectory(SoundTouch) # XXX: I can't meet dependencies
 add_subdirectory(SqlDatabase)
 add_subdirectory(Syslog)

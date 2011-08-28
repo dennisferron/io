@@ -2,7 +2,7 @@
 
 
 Server := Object clone do(
-    socket := Socket clone setHostName("localhost") setPort(8080)
+    socket := Socket clone setHost("localhost") setPort(8080)
     start := method(
 	writeln("server listing on port ", socket port)
 	socket serverOpen
@@ -30,7 +30,7 @@ Server := Object clone do(
 Server @start
 
 Client := Object clone do(
-    socket := Socket clone setHostName("localhost") setPort(8080)
+    socket := Socket clone setHost("localhost") setPort(8080)
     start := method(
 	writeln("client connecting to ", socket host, " on port ", socket port)
 	wait(2)

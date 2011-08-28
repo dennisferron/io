@@ -1,4 +1,5 @@
 OauthResponse := Object clone do(
+	request ::= nil
 	data ::= nil
 	
 	body ::= nil
@@ -11,7 +12,10 @@ OauthResponse := Object clone do(
 	
 	parseData := method(
 		debugWriteln(data)
-		headersSeq := data beforeSeq("\n")
+		headersSeq := data beforeSeq("\n\n")
+		if(headersSeq isEmpty,
+			Exception raise("Empty Response for " .. request url .. ":\n" .. data)
+		)
 		lines := headersSeq split("\n")
 		setStatusCode(lines removeFirst betweenSeq(" ", " ") asNumber)
 		lines foreach(headerLine,

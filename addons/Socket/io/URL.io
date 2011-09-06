@@ -10,6 +10,7 @@ URL := Notifier clone do(
 	cacheTimeout := 24*60*60
 	followRedirects ::= true
 	maxRedirects ::= 1
+	redirectUrlNormalizer ::= nil
 	
 	cacheStore := method(data,
 		cacheFile setContents(data)
@@ -94,7 +95,7 @@ page := URL clone setURL(\"http://www.google.com/\") fetch
 	*/
 
 	escapeString := method(u,
-		EvOutRequest encodeUri(u)
+		u percentEncoded
 	)
 
 	/*doc URL unescapeString(aString)
@@ -215,6 +216,9 @@ page := URL clone setURL(\"http://www.google.com/\") fetch
 			 		return Error with("max redirects")
 				)
 				newUrl := self responseHeaders at("Location")
+				if(redirectUrlNormalizer,
+					newUrl = redirectUrlNormalizer normalizeRedirectUrl(newUrl)
+				)
 				//writeln("REDIRECT TO ", newUrl)
 				self setRedirectUrl(childUrl(newUrl))
 				
@@ -394,7 +398,7 @@ page := URL clone setURL(\"http://www.google.com/\") fetch
 		while(socket isOpen,
 			socket streamReadNextChunk returnIfError
 			if(contentLength and b size >= contentLength, break)
-			if(getSlot("progressBlock"), progressBlock(b size, contentLength))
+			if(getSlot("progressBlock"), progressBlock(b size, contentLength) call)
 		)
 
 		if(responseHeaders at("Transfer-Encoding") == "chunked",
@@ -479,7 +483,7 @@ page := URL clone setURL(\"http://www.google.com/\") fetch
 		
 		if(parameters type == "Map") then(
 			content := parameters keys map(k,
-				Sequence with(escapeString(k), "=", escapeString(parameters at(k)))
+				Sequence with(k urlEncoded, "=", parameters at(k) urlEncoded)
 			) join("&")
 		) else(
 			content := parameters
@@ -541,7 +545,7 @@ page := URL clone setURL(\"http://www.google.com/\") fetch
 
 		if(parameters type == "Map") then(
 			content := parameters keys map(k,
-				Sequence with(escapeString(k), "=", escapeString(parameters at(k)))
+				Sequence with(k urlEncoded, "=", parameters at(k) urlEncoded)
 			) join("&")
 		) else(
 			content := parameters
@@ -607,7 +611,9 @@ Sequence asURL := method(URL with(self))
 
 //doc Map asQueryString Returns a urlencoded query string representation of this map
 Map asQueryString := method(
-	if(isEmpty, "", "?" .. asFormEncodedBody)
+	if(isEmpty, "", "?" .. keys sort map(k,
+        k percentEncoded .. "=" .. at(k) percentEncoded
+    ) join("&"))
 )
 
 //doc Map asFormEncodedBody Returns a urlencoded query string representation of this map

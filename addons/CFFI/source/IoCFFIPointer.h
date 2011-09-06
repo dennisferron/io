@@ -29,6 +29,7 @@ IoCFFIPointer	*IoCFFIPointer_ToType_(IoObject *type);
 IoCFFIPointer	*IoCFFIPointer_new(void *state);
 
 IoObject	*IoCFFIPointer_address(IoCFFIPointer *self, IoObject *locals, IoMessage *m);
+IoObject	*IoCFFIPointer_setAddress(IoCFFIPointer *self, IoObject *locals, IoMessage *m);
 IoObject	*IoCFFIPointer_value(IoCFFIPointer *self, IoObject *locals, IoMessage *m);
 IoObject	*IoCFFIPointer_setValue(IoCFFIPointer *self, IoObject *locals, IoMessage *m);
 IoObject	*IoCFFIPointer_toType(IoCFFIPointer *self, IoObject *locals, IoMessage *m);

@@ -47,6 +47,7 @@ IoCFFIPointer *IoCFFIPointer_proto(void *state)
 	{
 		IoMethodTable methodTable[] = {
 			{"address", IoCFFIPointer_address},
+			{"setAddress", IoCFFIPointer_setAddress},
 			{"asBuffer", IoCFFIPointer_asBuffer},
 			{"at", IoCFFIPointer_at},
 			{"atPut", IoCFFIPointer_atPut},
@@ -126,6 +127,15 @@ IoObject *IoCFFIPointer_address(IoCFFIPointer *self, IoObject *locals, IoMessage
 	else {
 		return IONIL(self);
 	}
+}
+
+IoObject *IoCFFIPointer_setAddress(IoCFFIPointer *self, IoObject *locals, IoMessage *m)
+{
+	int addr = IoMessage_locals_intArgAt_(m, locals, 0);
+
+    *(DATA(self)->valuePointer) = (void **)addr;
+
+    return self;
 }
 
 IoObject *IoCFFIPointer_value(IoCFFIPointer *self, IoObject *locals, IoMessage *m)
